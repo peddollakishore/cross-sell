@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "library(dummies)\nlibrary(caret)\n\n# Importing the data\n\ndata<-read.csv('E:\\\\POC\\\\Health\\\\DiabetesPrediction-master\\\\patientdata.csv')\n\n# Data Preparation\n\ndata<-dummy.data.frame(data,names = 'Gender')\nnearZeroVar(data)\n\nif (length(nearZeroVar(data)) > 0) {\n  data <- data[, -nearZeroVar(data)] \n}\n\n# Data Partition \ndatapart <- createDataPartition(data$DMIndicator,p=0.7,list = F)\ntrain <- data[datapart,]\nvalidate <- data[-datapart,]\n\n\n# Model fit\nfit<-glm(DMIndicator~.-1,family = 'binomial',data = train[-c(1,5,6,7)])\nsummary(fit)\n\n\nselect_p <- summary(fit)$coeff[-1,4] < 0.05\n# select sig. variables\nselect_n <- names(select_p)[select_p == TRUE] \n# formula with only sig variables\nsig.formula <- as.formula(paste(\"DMIndicator ~\",paste(select_n, collapse= \"+\"))) \n\nmodel<-step(glm(DMIndicator ~ GenderM + hasHeartDisease + blood + circulatory + \n                  endoctrine + genitourinary + infectious + suppl + symptoms.or.ill.defined + \n                  MinBMI + isOverweight + isObese + meanDiastolicBP + Age-1,family = 'binomial',data = train))\nsummary(model)\n\n# Prediction\npred_glm<-predict(model, validate,type = 'response')\npred_glm <- ifelse(pred_glm > 0.75,1,0)\n\n# Confusion Matrix\nconfusionMatrix(validate$DMIndicator,pred_glm)\n",
+    "created" : 1508767807878.000,
+    "dirty" : false,
+    "encoding" : "ISO8859-1",
+    "folds" : "",
+    "hash" : "2780039106",
+    "id" : "3FA05BBB",
+    "lastKnownWriteTime" : 1508756358,
+    "last_content_update" : 1508756358,
+    "path" : "E:/POC/Health/script.R",
+    "project_path" : null,
+    "properties" : {
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

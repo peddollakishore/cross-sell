@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "library(caret)\n\ntrain<-read.csv('train.csv')\ntest<-read.csv('test.csv')\ntrain1<-train\ntrain<-train1\n\n# remove empty columns\ntrain <- train[,colSums(is.na(train))<nrow(train)]\n# Missing value persentage for each col\napply(train,2,function(col)sum(is.na(col))/length(col))\n\nnearZeroVar(train)\n\nif (length(nearZeroVar(train)) > 0) {\n  train <- train[, -nearZeroVar(train)] \n}\n\n# after history run\n\ntrain2 <- train[lapply(train, function(x) sum(is.na(x)) / length(x) ) < 0.9 ]\ntrain3<-rbind(train2,train$)\nnames(train)\nnames(test)\ntable(train)",
+    "created" : 1508755191663.000,
+    "dirty" : false,
+    "encoding" : "ISO8859-1",
+    "folds" : "",
+    "hash" : "2763024226",
+    "id" : "14E9717E",
+    "lastKnownWriteTime" : 1508769353,
+    "last_content_update" : 1508769353273,
+    "path" : "E:/Cross-sell/cross-sell/script.R",
+    "project_path" : "script.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "library(caret)\nrareevent_boost <- read.csv(\"C:\\\\Users\\\\kpeddolla\\\\Downloads\\\\SampleData_IMC.csv\")\nrareevent_boost<-rareevent_boost[-1]\ndmy<-dummyVars(\"~.\",data=rareevent_boost)\nrareeventTrsf<-data.frame(predict(dmy,newdata= rareevent_boost))\nset.seed(10)\nsub <- sample(nrow(rareeventTrsf), floor(nrow(rareeventTrsf) * 0.9))\nsub1 <- sample(nrow(rareeventTrsf), floor(nrow(rareeventTrsf) * 0.1))\ntraining <- rareeventTrsf [sub, ]\ntesting <- rareeventTrsf [-sub, ]\ntraining_sub<- rareeventTrsf [sub1, ]\ntables(training_sub)\nhead(training_sub)\n\n#for unbalanced data set#\ninstall.packages(\"unbalanced\")\nlibrary(unbalanced)\ndata(ubIonosphere)\nn<-ncol(rareevent_boost)\noutput<- rareevent_boost $CHURN_FLAG\noutput<-as.factor(output)\ninput<- rareevent_boost [ ,-n]\nView(input)\n\n\n\n#Balance the Dataset using ubSMOTE#\n\ndata<-ubBalance(X= input, Y=output, type=\"ubSMOTE\", percOver=300, percUnder=150, verbose=TRUE)\n\n\n",
+    "created" : 1508826338834.000,
+    "dirty" : true,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "1821259146",
+    "id" : "8D12E4EE",
+    "lastKnownWriteTime" : 30399761347838067,
+    "last_content_update" : 1508827058937,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
