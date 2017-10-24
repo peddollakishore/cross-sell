@@ -1,0 +1,9 @@
+{
+    "path" : "E:/Cross-sell/cross-sell",
+    "sortOrder" : [
+        {
+            "ascending" : true,
+            "columnIndex" : 2
+        }
+    ]
+}

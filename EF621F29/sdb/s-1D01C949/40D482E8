@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "library(caret)\nsetwd('E:\\\\Analystics Vidhya\\\\cross-sell-master\\\\data')\ntrain<-read.csv('train.csv')\ntest<-read.csv('test.csv')\ntrain1<-train\ntrain<-train1\n\n# remove empty columns\ntrain <- train[,colSums(is.na(train))<nrow(train)]\n# Missing value persentage for each col\napply(train,2,function(col)sum(is.na(col))/length(col))\n\nnearZeroVar(train)\n\nif (length(nearZeroVar(train)) > 0) {\n  train <- train[, -nearZeroVar(train)] \n}\n\n# after history run\n\ntrain2 <- train[lapply(train, function(x) sum(is.na(x)) / length(x) ) < 0.9 ]\ntrain3<-cbind(train2,train1$RESPONDERS)\ntrain3$target<-ifelse(train3$`train1$RESPONDERS`=='N',0,1)\ntrain3$target<-as.factor(train3$target)\nsummary(train3)\nnames(train3)\nprop.table(table(train3$target))\n\ntrain3$`train1$RESPONDERS`[train3$`train1$RESPONDERS`=='N']<-'0'\nstr(train3)\nlibrary(caret)\nset.seed(1234)\nsplitIndex <- createDataPartition(train3$target, p = .70,\n                                  list = FALSE,\n                                  times = 1)\ntrainSplit <- train3[ splitIndex,]\ntestSplit <- train3[-splitIndex,]\nstr(trainSplit)\nctrl <- trainControl(method = \"cv\", number = 5)\ntbmodel <- train(target ~ ., data = trainSplit[-1], method = \"treebag\",\n                 trControl = ctrl)\n\npredictors <- names(trainSplit)[names(trainSplit) != 'target']\npred <- predict(tbmodel$finalModel, testSplit[,predictors])\n\n\n\n\n\n\n\n\n",
+    "created" : 1508863762590.000,
+    "dirty" : false,
+    "encoding" : "ISO8859-1",
+    "folds" : "",
+    "hash" : "968538629",
+    "id" : "40D482E8",
+    "lastKnownWriteTime" : 1508864873,
+    "last_content_update" : 1508864873790,
+    "path" : "E:/Analystics Vidhya/cross-sell-master/cross-sell-master/script.R",
+    "project_path" : "script.R",
+    "properties" : {
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
