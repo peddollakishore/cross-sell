@@ -19,7 +19,34 @@ if (length(nearZeroVar(train)) > 0) {
 # after history run
 
 train2 <- train[lapply(train, function(x) sum(is.na(x)) / length(x) ) < 0.9 ]
-train3<-rbind(train2,train$)
-names(train)
-names(test)
-table(train)
+train3<-cbind(train2,train1$RESPONDERS)
+train3$target<-ifelse(train3$`train1$RESPONDERS`=='N',0,1)
+train3$target<-as.factor(train3$target)
+summary(train3)
+names(train3)
+prop.table(table(train3$target))
+
+train3$`train1$RESPONDERS`[train3$`train1$RESPONDERS`=='N']<-'0'
+str(train3)
+library(caret)
+set.seed(1234)
+splitIndex <- createDataPartition(train3$target, p = .70,
+                                  list = FALSE,
+                                  times = 1)
+trainSplit <- train3[ splitIndex,]
+testSplit <- train3[-splitIndex,]
+str(trainSplit)
+ctrl <- trainControl(method = "cv", number = 5)
+tbmodel <- train(target ~ ., data = trainSplit[-1], method = "treebag",
+                 trControl = ctrl)
+
+predictors <- names(trainSplit)[names(trainSplit) != 'target']
+pred <- predict(tbmodel$finalModel, testSplit[,predictors])
+
+
+
+
+
+
+
+
